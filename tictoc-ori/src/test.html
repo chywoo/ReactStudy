@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2D Grid</title>
+    <style>
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 10px;
+        }
+
+        .grid-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            font-size: 24px;
+        }
+
+        .board-row:after {
+            clear: both;
+            content: '';
+            display: table;
+        }
+
+        .board-row:after {
+            clear: both;
+            content: '';
+            display: table;
+        }
+
+        .float-image {
+            float: right;
+            width: 100px;
+            height: 100px;
+            margin-right: 10px;
+        }
+
+        .box {
+            float: left;
+            width: 100px;
+            height: 100px;
+            background-color: lightblue;
+            margin: 5px;
+        }
+
+        .container {
+            border: 1px solid black;
+        }
+
+        /* Clearfix */
+        .container:after {
+            content: '';
+            display: table;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="box">Box 1</div>
+        <div class="box">Box 2</div>
+    </div>
+
+    <!-- <div class="container">
+        <p>이 텍스트는 이미지 주위를 감쌉니다.</p>
+        <img src="example.png" class="float-image">
+        <p>이 텍스트는 이미지 주위를 감쌉니다.</p>
+    </div> -->
+</body>
+
+</html>
+</div>
