@@ -1,17 +1,25 @@
 import React from 'react'
 import { judgeWinner } from './App';
+import { useEffect } from 'react';
+import { gsap } from 'gsap';
 
-function Cell({ value, isO, onClick }) {
+function Cell({ cellIndex, value, isO, onClick }) {
 
     // if isO is true, then the text of cell is blue, otherwise red
-    const cls = value == "O" ?
-        'border rounded-md text-bold text-3xl bg-white border-gray-600 text-blue-600' :
-        'border rounded-md text-bold text-3xl bg-white border-gray-600 text-red-600';
+    let cls = 'border rounded-md text-bold text-3xl bg-white border-gray-600 '
+    cls += value === "O" ? 'text-blue-600' :
+        value === "X" ? 'text-red-600' : '';
 
-    console.log("value: ", value, cls);
-
+    useEffect(() => {
+        if (value) {
+            gsap.to(
+                `#cell-${cellIndex}`,
+                { rotationY: 360, duration: 1, ease: "power1.inOut" }
+            );
+        }
+    }, [value]);
     return (
-        <button onClick={onClick} className={cls}>{value}</button>
+        <button onClick={onClick} className={cls}><div id={`cell-${cellIndex}`}>{value}</div></button>
     )
 }
 

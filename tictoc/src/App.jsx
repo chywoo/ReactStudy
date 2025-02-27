@@ -49,7 +49,7 @@ function Board({ data, isO, onPlay }) {
       <div className="grid grid-cols-[repeat(3,50px)] grid-rows-[repeat(3,50px)]">
         {
           data.map((cell, i) => (
-            <Cell key={i} value={cell} isO={isO} onClick={() => handleClick(i)} />
+            <Cell key={i} cellIndex={i} value={cell} isO={isO} onClick={() => handleClick(i)} />
           ))
         }
       </div>
