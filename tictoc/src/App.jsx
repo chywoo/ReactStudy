@@ -6,7 +6,7 @@ import gsap from 'gsap';
 function Game() {
   const [data, setData] = useState(Array(9).fill(null));
   const [isO, setO] = useState(true);
-  const [winningPoint, setWinningPoint] = useState(null);
+  // const [winningPoint, setWinningPoint] = useState(null);
 
   function onPlay(index) {
     const newData = data.slice();
@@ -15,44 +15,38 @@ function Game() {
     setO(!isO);
   }
 
-  useEffect(() => {
-    const winner = judgeWinner(data);
-    if (winner) {
-      setWinningPoint([winner[1], winner[2], winner[3]]);
-    } else {
-      setWinningPoint(null);
-    }
-  }, [data]);
-
   return (
     <>
-      <Board data={data} isO={isO} onPlay={onPlay} winningPoint={winningPoint} />
+      <Board data={data} isO={isO} onPlay={onPlay} />
     </>
   );
 }
 
-function Board({ data, isO, onPlay, winningPoint }) {
+function Board({ data, isO, onPlay }) {
   function handleClick(i) {
     if (judgeWinner(data) || data[i]) return;  // prevent overwriting
 
     onPlay(i);
   }
 
+  const winningPoint = useRef(null);
+
   useEffect(() => {
-    if (winningPoint) {
-      gsap.to(winningPoint.map(index => `#cell-${index}`), {
+    if (winningPoint.current) {
+      gsap.to(winningPoint.current.map(index => `#cell-${index}`), {
         rotationY: 720,
         duration: 2,
         delay: 1,
         ease: "power1.inOut"
       });
     }
-  }, [winningPoint]);
+  }, [winningPoint.current]);
 
   let status;
   let winner = judgeWinner(data);
   if (winner) {
     status = `Winner: ${winner[0]}`;
+    winningPoint.current = [winner[1], winner[2], winner[3]];
   } else {
     status = `Player: ${isO ? "O" : "X"}`;
   }
