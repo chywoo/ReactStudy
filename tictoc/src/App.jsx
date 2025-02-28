@@ -29,31 +29,26 @@ function Board({ data, isO, onPlay }) {
     onPlay(i);
   }
 
-  const winningPoint = useRef(null);
+  const gameStatus = useRef(null);
 
   useEffect(() => {
-    if (winningPoint.current) {
-      gsap.to(winningPoint.current.map(index => `#cell-${index}`), {
+    const winner = judgeWinner(data);
+    if (winner) {
+      gameStatus.current = winner[0];
+      gsap.to([winner[1], winner[2], winner[3]].map(index => `#cell-${index}`), {
         rotationY: 720,
         duration: 2,
         delay: 1,
         ease: "power1.inOut"
       });
     }
-  }, [winningPoint.current]);
+  }, [data]);
 
-  let status;
-  let winner = judgeWinner(data);
-  if (winner) {
-    status = `Winner: ${winner[0]}`;
-    winningPoint.current = [winner[1], winner[2], winner[3]];
-  } else {
-    status = `Player: ${isO ? "O" : "X"}`;
-  }
+  let statusMsg = gameStatus.current ? `Winner: ${gameStatus.current}` : `Player: ${isO ? "O" : "X"}`;
 
   return (
     <>
-      <h1>{status}</h1>
+      <h1>{statusMsg}</h1>
 
       <div className="grid grid-cols-[repeat(3,50px)] grid-rows-[repeat(3,50px)]">
         {
