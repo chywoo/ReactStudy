@@ -6,7 +6,6 @@ import gsap from 'gsap';
 function Game() {
   const [data, setData] = useState(Array(9).fill(null));
   const [isO, setO] = useState(true);
-  // const [winningPoint, setWinningPoint] = useState(null);
 
   function onPlay(index) {
     const newData = data.slice();
@@ -18,6 +17,7 @@ function Game() {
   return (
     <>
       <Board data={data} isO={isO} onPlay={onPlay} />
+      <Reset />
     </>
   );
 }
@@ -29,27 +29,32 @@ function Board({ data, isO, onPlay }) {
     onPlay(i);
   }
 
-  const gameStatus = useRef(null);
+  const [gameStatus, setGameStatus] = useState(`Player: ${isO ? "O" : "X"}`);
 
   useEffect(() => {
     const winner = judgeWinner(data);
+
     if (winner) {
-      gameStatus.current = winner[0];
-      gsap.to([winner[1], winner[2], winner[3]].map(index => `#cell-${index}`), {
-        rotationY: 720,
-        duration: 2,
-        delay: 1,
-        ease: "power1.inOut"
-      });
+      if (winner[0] !== 'Tie') {
+        setGameStatus(`Winner: ${winner[0]}`);
+        gsap.to([winner[1], winner[2], winner[3]].map(index => `#cell-${index}`), {
+          rotationY: 720,
+          duration: 2,
+          delay: 1,
+          ease: "power1.inOut"
+        });
+      } else {
+        setGameStatus('Game is Tie');
+      }
+    } else {
+      setGameStatus(`Player: ${isO ? "O" : "X"}`);
     }
   }, [data]);
 
-  let statusMsg = gameStatus.current ? `Winner: ${gameStatus.current}` : `Player: ${isO ? "O" : "X"}`;
 
   return (
     <>
-      <h1>{statusMsg}</h1>
-
+      <h1>{gameStatus}</h1>
       <div className="grid grid-cols-[repeat(3,50px)] grid-rows-[repeat(3,50px)]">
         {
           data.map((cell, i) => (
@@ -58,6 +63,12 @@ function Board({ data, isO, onPlay }) {
         }
       </div>
     </>
+  );
+}
+
+function Reset() {
+  return (
+    <button onClick={() => window.location.reload()}>Reset</button>
   );
 }
 
@@ -81,7 +92,17 @@ export function judgeWinner(data) {
     }
   }
 
-  return null;
+  // check if game is tie.
+  for (let i = 0; i < data.length; i++) {
+    if (data[i] === null) {
+      return null;
+    }
+  }
+
+  if (data.every(cell => cell !== null))
+    return ['Tie'];
+  else
+    return null;
 }
 
 export default Game;
